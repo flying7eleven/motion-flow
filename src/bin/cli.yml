@@ -16,6 +16,7 @@ subcommands:
       args:
         - input_folder:
             help: The folder from which we should read the input images.
+            required: true
             index: 1
         - pattern:
             short: p
