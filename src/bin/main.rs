@@ -31,28 +31,33 @@ fn main() {
     // just log that the basic application has started now
     trace!("Application started");
 
-    // based on the correct sub-command, select the module to run it
-    let sub_command = match argument_matches.subcommand_name().unwrap() {
-        "flowanalysis" => FlowAnalysis::new(
-            argument_matches
-                .subcommand_matches("flowanalysis")
-                .unwrap()
-                .value_of("input_folder")
-                .unwrap(),
-            argument_matches
-                .subcommand_matches("flowanalysis")
-                .unwrap()
-                .value_of("pattern")
-                .unwrap(),
-        ),
-        _ => panic!("Unknown sub-command selected."),
-    };
+    // check if a sub-command was selected or not
+    if argument_matches.subcommand_name().is_none() {
+        error!("It seems that no sub-command was selected. Terminating.")
+    } else {
+        // based on the correct sub-command, select the module to run it
+        let sub_command = match argument_matches.subcommand_name().unwrap() {
+            "flowanalysis" => FlowAnalysis::new(
+                argument_matches
+                    .subcommand_matches("flowanalysis")
+                    .unwrap()
+                    .value_of("input_folder")
+                    .unwrap(),
+                argument_matches
+                    .subcommand_matches("flowanalysis")
+                    .unwrap()
+                    .value_of("pattern")
+                    .unwrap(),
+            ),
+            _ => panic!("Unknown sub-command selected."),
+        };
 
-    //
-    if sub_command.is_err() {
-        error!(
-            "Could not create an instance of the sub-command. The error was: {:?}",
-            sub_command.err().unwrap()
-        )
+        // if it failed to create the sub-command, tell the user why
+        if sub_command.is_err() {
+            error!(
+                "Could not create an instance of the sub-command. The error was: {:?}",
+                sub_command.err().unwrap()
+            )
+        }
     }
 }
