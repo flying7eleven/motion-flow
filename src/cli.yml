@@ -1,0 +1,24 @@
+name: motion-flow
+version: "0.1.0"
+author: Tim Hütz <tim@huetz.biz>
+about: Tool for analying image series to detect the areas of the most motion.
+args:
+  - verbose:
+      short: v
+      multiple: true
+      help: Sets the level of verbosity
+
+subcommands:
+  - flowanalysis:
+      version: "0.1.0"
+      author: Tim Hütz <tim@huetz.biz>
+      about: Do an actual motion flow analysis on a series of images.
+      args:
+        - input_folder:
+            help: The folder from which we should read the input images.
+            index: 1
+        - pattern:
+            short: p
+            multiple: false
+            help: The regular expression used to identify the input images.
+            default_value: ".*"
