@@ -31,13 +31,28 @@ fn main() {
     // just log that the basic application has started now
     trace!("Application started");
 
-    // based on the correct subcommand, select the module to run it
-    if let Some(matches) = argument_matches.subcommand_matches("flowanalysis") {
-        FlowAnalysis::new(
-            matches.value_of("input_folder").unwrap(),
-            matches.value_of("pattern").unwrap(),
-        );
-    } else {
-        error!("The requested subcommand seems not to be implemented.");
+    // based on the correct sub-command, select the module to run it
+    let sub_command = match argument_matches.subcommand_name().unwrap() {
+        "flowanalysis" => FlowAnalysis::new(
+            argument_matches
+                .subcommand_matches("flowanalysis")
+                .unwrap()
+                .value_of("input_folder")
+                .unwrap(),
+            argument_matches
+                .subcommand_matches("flowanalysis")
+                .unwrap()
+                .value_of("pattern")
+                .unwrap(),
+        ),
+        _ => panic!("Unknown sub-command selected."),
+    };
+
+    //
+    if sub_command.is_err() {
+        error!(
+            "Could not create an instance of the sub-command. The error was: {:?}",
+            sub_command.err().unwrap()
+        )
     }
 }

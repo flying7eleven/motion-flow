@@ -16,8 +16,8 @@ pub enum Error {
 
 impl FlowAnalysis {
     pub fn new(folder: &str, pattern: &str) -> Result<FlowAnalysis, Error> {
-        if !fs::metadata(folder).is_ok() {
-            error!("The provided input folder sems not to exist. Cannot proceed.");
+        if fs::metadata(folder).is_err() {
+            error!("The provided input folder seems not to exist. Cannot proceed.");
             Err(InputFolderDoesNotExist())
         } else {
             let compiled_pattern = Regex::new(pattern);
@@ -37,9 +37,7 @@ impl FlowAnalysis {
 
 #[cfg(test)]
 mod tests {
-    use crate::subcommands::flowanalysis::Error::{
-        InputFolderDoesNotExist, RegularExpressionInvalid,
-    };
+    use crate::subcommands::flowanalysis::Error::InputFolderDoesNotExist;
     use crate::subcommands::flowanalysis::FlowAnalysis;
 
     #[test]
