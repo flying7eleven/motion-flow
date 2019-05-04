@@ -33,7 +33,7 @@ fn main() {
 
     // based on the correct subcommand, select the module to run it
     if let Some(matches) = argument_matches.subcommand_matches("flowanalysis") {
-        FlowAnalysis::new();
+        FlowAnalysis::new(matches.value_of("input_folder").unwrap(), matches.value_of("pattern").unwrap());
     } else {
         error!("The requested subcommand seems not to be implemented.");
     }
