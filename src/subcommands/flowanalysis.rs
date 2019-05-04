@@ -1,4 +1,4 @@
-use log::{trace, error};
+use log::trace;
 
 pub struct FlowAnalysis();
 

@@ -1,9 +1,9 @@
-use clap::App;
 use clap::load_yaml;
-use log::{trace, error};
+use clap::App;
+use log::{error, trace};
+use motion_flow::subcommands::flowanalysis::FlowAnalysis;
 use simplelog::{CombinedLogger, Config, LevelFilter, TermLogger, WriteLogger};
 use std::fs::File;
-use motion_flow::subcommands::flowanalysis::FlowAnalysis;
 
 fn main() {
     // configure the command line parser first (since we need the verbosity level for the logger)
@@ -26,13 +26,13 @@ fn main() {
             File::create("motion-flow.log").unwrap(),
         ),
     ])
-        .unwrap();
+    .unwrap();
 
     // just log that the basic application has started now
     trace!("Application started");
 
     // based on the correct subcommand, select the module to run it
-    if let Some(matches) = argument_matches.subcommand_matches("flowanalysis") {
+    if let Some(_matches) = argument_matches.subcommand_matches("flowanalysis") {
         FlowAnalysis::new();
     } else {
         error!("The requested subcommand seems not to be implemented.");
