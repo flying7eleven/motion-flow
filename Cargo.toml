@@ -5,3 +5,7 @@ authors = ["Tim Hütz <tim@huetz.biz>"]
 edition = "2018"
 
 [dependencies]
+log = "0.4.6"
+simplelog = "0.5.3"
+clap = {version = "2.33.0", features = ["yaml"]}
+dirs = "1.0.5"
