@@ -37,7 +37,9 @@ impl FlowAnalysis {
 
 #[cfg(test)]
 mod tests {
-    use crate::subcommands::flowanalysis::Error::InputFolderDoesNotExist;
+    use crate::subcommands::flowanalysis::Error::{
+        InputFolderDoesNotExist, RegularExpressionInvalid,
+    };
     use crate::subcommands::flowanalysis::FlowAnalysis;
 
     #[test]
@@ -47,14 +49,12 @@ mod tests {
         assert_eq!(instance.err().unwrap(), InputFolderDoesNotExist());
     }
 
-    /*
     #[test]
     fn creating_with_valid_folder_and_invalid_pattern_fails() {
-        let instance = FlowAnalysis::new(".", "\u{10FFFF}");
+        let instance = FlowAnalysis::new(".", r"(?m)^([0-9]+$");
         assert_eq!(instance.is_err(), true);
         assert_eq!(instance.err().unwrap(), RegularExpressionInvalid());
     }
-    */
 
     #[test]
     fn creating_with_valid_folder_and_valid_pattern_works() {
