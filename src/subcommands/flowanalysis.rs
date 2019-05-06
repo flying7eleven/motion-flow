@@ -1,4 +1,3 @@
-use crate::subcommands::flowanalysis::Error::{InputFolderDoesNotExist, RegularExpressionInvalid};
 use log::{error, trace};
 use regex::Regex;
 use std::fs;
@@ -10,21 +9,21 @@ pub struct FlowAnalysis {
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Error {
-    RegularExpressionInvalid(),
-    InputFolderDoesNotExist(),
+    RegularExpressionInvalid,
+    InputFolderDoesNotExist,
 }
 
 impl FlowAnalysis {
     pub fn new(folder: &str, pattern: &str) -> Result<FlowAnalysis, Error> {
         if fs::metadata(folder).is_err() {
             error!("The provided input folder seems not to exist. Cannot proceed.");
-            return Err(InputFolderDoesNotExist());
+            return Err(Error::InputFolderDoesNotExist);
         }
 
         let compiled_pattern = Regex::new(pattern);
         if compiled_pattern.is_err() {
             error!("Could not compile pattern to a regular expression.");
-            return Err(RegularExpressionInvalid());
+            return Err(Error::RegularExpressionInvalid);
         }
 
         trace!("New instance of a flow-analysis sub-command created.");
@@ -37,23 +36,21 @@ impl FlowAnalysis {
 
 #[cfg(test)]
 mod tests {
-    use crate::subcommands::flowanalysis::Error::{
-        InputFolderDoesNotExist, RegularExpressionInvalid,
-    };
+    use crate::subcommands::flowanalysis::Error;
     use crate::subcommands::flowanalysis::FlowAnalysis;
 
     #[test]
     fn creating_with_invalid_folder_and_valid_pattern_fails() {
         let instance = FlowAnalysis::new("/this/folder/does/not/exist", ".*");
         assert_eq!(instance.is_err(), true);
-        assert_eq!(instance.err().unwrap(), InputFolderDoesNotExist());
+        assert_eq!(instance.err().unwrap(), Error::InputFolderDoesNotExist);
     }
 
     #[test]
     fn creating_with_valid_folder_and_invalid_pattern_fails() {
         let instance = FlowAnalysis::new(".", r"(?m)^([0-9]+$");
         assert_eq!(instance.is_err(), true);
-        assert_eq!(instance.err().unwrap(), RegularExpressionInvalid());
+        assert_eq!(instance.err().unwrap(), Error::RegularExpressionInvalid);
     }
 
     #[test]
