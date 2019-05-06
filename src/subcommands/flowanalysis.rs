@@ -18,20 +18,20 @@ impl FlowAnalysis {
     pub fn new(folder: &str, pattern: &str) -> Result<FlowAnalysis, Error> {
         if fs::metadata(folder).is_err() {
             error!("The provided input folder seems not to exist. Cannot proceed.");
-            Err(InputFolderDoesNotExist())
-        } else {
-            let compiled_pattern = Regex::new(pattern);
-            if compiled_pattern.is_err() {
-                error!("Could not compile pattern to a regular expression.");
-                Err(RegularExpressionInvalid())
-            } else {
-                trace!("New instance of a flow-analysis sub-command created.");
-                Ok(FlowAnalysis {
-                    input_folder: folder.to_string(),
-                    input_pattern: compiled_pattern.unwrap(),
-                })
-            }
+            return Err(InputFolderDoesNotExist());
         }
+
+        let compiled_pattern = Regex::new(pattern);
+        if compiled_pattern.is_err() {
+            error!("Could not compile pattern to a regular expression.");
+            return Err(RegularExpressionInvalid());
+        }
+
+        trace!("New instance of a flow-analysis sub-command created.");
+        Ok(FlowAnalysis {
+            input_folder: folder.to_string(),
+            input_pattern: compiled_pattern.unwrap(),
+        })
     }
 }
 
