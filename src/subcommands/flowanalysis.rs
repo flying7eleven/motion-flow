@@ -14,7 +14,7 @@ pub enum Error {
 }
 
 impl FlowAnalysis {
-    pub fn new(folder: &str, pattern: &str) -> Result<FlowAnalysis, Error> {
+    pub fn new(folder: &str, pattern: &str) -> Result<Box<FlowAnalysis>, Error> {
         if fs::metadata(folder).is_err() {
             error!("The provided input folder seems not to exist. Cannot proceed.");
             return Err(Error::InputFolderDoesNotExist);
@@ -27,10 +27,10 @@ impl FlowAnalysis {
         }
 
         trace!("New instance of a flow-analysis sub-command created.");
-        Ok(FlowAnalysis {
-            input_folder: folder.to_string(),
-            input_pattern: compiled_pattern.unwrap(),
-        })
+        Ok(Box::new(FlowAnalysis {
+            _input_folder: folder.to_string(),
+            _input_pattern: compiled_pattern.unwrap(),
+        }))
     }
 }
 
