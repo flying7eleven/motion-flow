@@ -9,7 +9,10 @@ pub struct FlowAnalysis {
 }
 
 impl FlowAnalysis {
-    pub fn new(folder: &str, pattern: &str) -> Result<Box<dyn SubCommand>, SubCommandError> {
+    pub fn get_instance(
+        folder: &str,
+        pattern: &str,
+    ) -> Result<Box<dyn SubCommand>, SubCommandError> {
         if fs::metadata(folder).is_err() {
             error!("The provided input folder seems not to exist. Cannot proceed.");
             return Err(SubCommandError::InputFolderDoesNotExist);
@@ -42,7 +45,7 @@ mod tests {
 
     #[test]
     fn creating_with_invalid_folder_and_valid_pattern_fails() {
-        let instance = FlowAnalysis::new("/this/folder/does/not/exist", ".*");
+        let instance = FlowAnalysis::get_instance("/this/folder/does/not/exist", ".*");
         assert_eq!(instance.is_err(), true);
         assert_eq!(
             instance.err().unwrap(),
@@ -52,7 +55,7 @@ mod tests {
 
     #[test]
     fn creating_with_valid_folder_and_invalid_pattern_fails() {
-        let instance = FlowAnalysis::new(".", r"(?m)^([0-9]+$");
+        let instance = FlowAnalysis::get_instance(".", r"(?m)^([0-9]+$");
         assert_eq!(instance.is_err(), true);
         assert_eq!(
             instance.err().unwrap(),
@@ -62,7 +65,7 @@ mod tests {
 
     #[test]
     fn creating_with_valid_folder_and_valid_pattern_works() {
-        let instance = FlowAnalysis::new(".", ".*");
+        let instance = FlowAnalysis::get_instance(".", ".*");
         assert_eq!(instance.is_err(), false);
     }
 }

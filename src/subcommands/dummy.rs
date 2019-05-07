@@ -4,7 +4,7 @@ use log::trace;
 pub struct Dummy {}
 
 impl Dummy {
-    pub fn new() -> Result<Box<dyn SubCommand>, SubCommandError> {
+    pub fn get_instance() -> Result<Box<dyn SubCommand>, SubCommandError> {
         trace!("New instance of a dummy sub-command created.");
         Ok(Box::new(Dummy {}))
     }
@@ -12,7 +12,7 @@ impl Dummy {
 
 impl SubCommand for Dummy {
     fn execute(&self) -> bool {
-        println!("{}", "Hello, Dummy!");
+        println!("Hello, Dummy!");
         true
     }
 }
@@ -23,7 +23,7 @@ mod tests {
 
     #[test]
     fn creating_an_instance_of_the_dummy_works() {
-        let instance = Dummy::new();
+        let instance = Dummy::get_instance();
         assert_eq!(instance.is_err(), false);
     }
 }

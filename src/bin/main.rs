@@ -40,8 +40,8 @@ fn main() {
         // based on the correct sub-command, select the module to run it
         let sub_command: Result<Box<dyn SubCommand>, SubCommandError> =
             match argument_matches.subcommand_name().unwrap() {
-                "dummy" => Dummy::new(),
-                "flowanalysis" => FlowAnalysis::new(
+                "dummy" => Dummy::get_instance(),
+                "flowanalysis" => FlowAnalysis::get_instance(
                     argument_matches
                         .subcommand_matches("flowanalysis")
                         .unwrap()
