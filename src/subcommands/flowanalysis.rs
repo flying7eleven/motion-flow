@@ -9,7 +9,7 @@ pub struct FlowAnalysis {
 }
 
 impl FlowAnalysis {
-    pub fn new(folder: &str, pattern: &str) -> Result<Box<FlowAnalysis>, SubCommandError> {
+    pub fn new(folder: &str, pattern: &str) -> Result<Box<dyn SubCommand>, SubCommandError> {
         if fs::metadata(folder).is_err() {
             error!("The provided input folder seems not to exist. Cannot proceed.");
             return Err(SubCommandError::InputFolderDoesNotExist);
@@ -64,8 +64,5 @@ mod tests {
     fn creating_with_valid_folder_and_valid_pattern_works() {
         let instance = FlowAnalysis::new(".", ".*");
         assert_eq!(instance.is_err(), false);
-        let unwrapped = instance.unwrap();
-        assert_eq!(unwrapped._input_folder, ".");
-        assert_eq!(unwrapped._input_pattern.as_str(), ".*");
     }
 }

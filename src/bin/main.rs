@@ -1,7 +1,9 @@
 use clap::load_yaml;
 use clap::App;
 use log::{error, trace};
+use motion_flow::subcommands::dummy::Dummy;
 use motion_flow::subcommands::flowanalysis::FlowAnalysis;
+use motion_flow::subcommands::{SubCommand, SubCommandError};
 use simplelog::{CombinedLogger, Config, LevelFilter, TermLogger, WriteLogger};
 use std::fs::File;
 
@@ -36,21 +38,23 @@ fn main() {
         error!("It seems that no sub-command was selected. Terminating.")
     } else {
         // based on the correct sub-command, select the module to run it
-        let sub_command = match argument_matches.subcommand_name().unwrap() {
-            "flowanalysis" => FlowAnalysis::new(
-                argument_matches
-                    .subcommand_matches("flowanalysis")
-                    .unwrap()
-                    .value_of("input_folder")
-                    .unwrap(),
-                argument_matches
-                    .subcommand_matches("flowanalysis")
-                    .unwrap()
-                    .value_of("pattern")
-                    .unwrap(),
-            ),
-            _ => panic!("Unknown sub-command selected."),
-        };
+        let sub_command: Result<Box<dyn SubCommand>, SubCommandError> =
+            match argument_matches.subcommand_name().unwrap() {
+                "dummy" => Dummy::new(),
+                "flowanalysis" => FlowAnalysis::new(
+                    argument_matches
+                        .subcommand_matches("flowanalysis")
+                        .unwrap()
+                        .value_of("input_folder")
+                        .unwrap(),
+                    argument_matches
+                        .subcommand_matches("flowanalysis")
+                        .unwrap()
+                        .value_of("pattern")
+                        .unwrap(),
+                ),
+                _ => panic!("Unknown sub-command selected."),
+            };
 
         // if it failed to create the sub-command, tell the user why
         if sub_command.is_err() {
@@ -58,6 +62,14 @@ fn main() {
                 "Could not create an instance of the sub-command. The error was: {:?}",
                 sub_command.err().unwrap()
             )
+        } else {
+            // execute the sub-command and show an error if this failed
+            if !sub_command.unwrap().execute() {
+                error!(
+                    "Failed to execute the {} sub-command.",
+                    argument_matches.subcommand_name().unwrap()
+                )
+            }
         }
     }
 }
