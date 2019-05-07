@@ -3,8 +3,8 @@ use regex::Regex;
 use std::fs;
 
 pub struct FlowAnalysis {
-    input_folder: String,
-    input_pattern: Regex,
+    _input_folder: String,
+    _input_pattern: Regex,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -57,5 +57,8 @@ mod tests {
     fn creating_with_valid_folder_and_valid_pattern_works() {
         let instance = FlowAnalysis::new(".", ".*");
         assert_eq!(instance.is_err(), false);
+        let unwrapped = instance.unwrap();
+        assert_eq!(unwrapped._input_folder, ".");
+        assert_eq!(unwrapped._input_pattern.as_str(), ".*");
     }
 }
