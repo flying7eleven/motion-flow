@@ -1,3 +1,4 @@
+use crate::subcommands::{SubCommand, SubCommandError};
 use log::{error, trace};
 use regex::Regex;
 use std::fs;
@@ -7,23 +8,17 @@ pub struct FlowAnalysis {
     _input_pattern: Regex,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub enum Error {
-    RegularExpressionInvalid,
-    InputFolderDoesNotExist,
-}
-
 impl FlowAnalysis {
-    pub fn new(folder: &str, pattern: &str) -> Result<Box<FlowAnalysis>, Error> {
+    pub fn new(folder: &str, pattern: &str) -> Result<Box<FlowAnalysis>, SubCommandError> {
         if fs::metadata(folder).is_err() {
             error!("The provided input folder seems not to exist. Cannot proceed.");
-            return Err(Error::InputFolderDoesNotExist);
+            return Err(SubCommandError::InputFolderDoesNotExist);
         }
 
         let compiled_pattern = Regex::new(pattern);
         if compiled_pattern.is_err() {
             error!("Could not compile pattern to a regular expression.");
-            return Err(Error::RegularExpressionInvalid);
+            return Err(SubCommandError::RegularExpressionInvalid);
         }
 
         trace!("New instance of a flow-analysis sub-command created.");
@@ -34,23 +29,35 @@ impl FlowAnalysis {
     }
 }
 
+impl SubCommand for FlowAnalysis {
+    fn execute(&self) -> bool {
+        unimplemented!()
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::subcommands::flowanalysis::Error;
     use crate::subcommands::flowanalysis::FlowAnalysis;
+    use crate::subcommands::SubCommandError;
 
     #[test]
     fn creating_with_invalid_folder_and_valid_pattern_fails() {
         let instance = FlowAnalysis::new("/this/folder/does/not/exist", ".*");
         assert_eq!(instance.is_err(), true);
-        assert_eq!(instance.err().unwrap(), Error::InputFolderDoesNotExist);
+        assert_eq!(
+            instance.err().unwrap(),
+            SubCommandError::InputFolderDoesNotExist
+        );
     }
 
     #[test]
     fn creating_with_valid_folder_and_invalid_pattern_fails() {
         let instance = FlowAnalysis::new(".", r"(?m)^([0-9]+$");
         assert_eq!(instance.is_err(), true);
-        assert_eq!(instance.err().unwrap(), Error::RegularExpressionInvalid);
+        assert_eq!(
+            instance.err().unwrap(),
+            SubCommandError::RegularExpressionInvalid
+        );
     }
 
     #[test]
