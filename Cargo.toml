@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["Tim Hütz <tim@huetz.biz>"]
 edition = "2018"
 
+[[bin]]
+name = "motionflow"
+path = "src/bin/main.rs"
+
 [dependencies]
 log = "0.4.6"
 simplelog = "0.5.3"
