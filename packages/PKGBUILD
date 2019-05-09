@@ -6,12 +6,16 @@ pkgdesc="Motion flow analysis on image series."
 arch=('i686' 'x86_64' 'armv6h' 'armv7h')
 url="https://github.com/thuetz/motion-flow/"
 license=('MIT')
-makedepends=('rust' 'cargo')
+makedepends=('rustup')
 
 build() {
+    rustup toolchain install stable
+    rustup default stable
+    cargo build --release
     return 0
 }
 
 package() {
-    cargo install --root="$pkgdir" motion-flow
+    mkdir -p $pkgdir/usr/bin
+    cp ../../target/release/motionflow $pkgdir/usr/bin/
 }
