@@ -10,7 +10,7 @@ args:
 
 subcommands:
   - dummy:
-      version: "0.1.0"
+      version: "1.0.0"
       author: Tim Hütz <tim@huetz.biz>
       about: Does nothing except tracing 'Hello, dummy!".
   - flowanalysis:
