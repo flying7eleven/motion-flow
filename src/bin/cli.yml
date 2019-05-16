@@ -13,6 +13,15 @@ subcommands:
       version: "1.0.0"
       author: Tim Hütz <tim@huetz.biz>
       about: Does nothing except tracing 'Hello, dummy!".
+  - show:
+      version: "0.1.0"
+      author: Tim Hütz <tim@huetz.biz>
+      about: Read a single image and display it.
+      args:
+        - image:
+            help: The image which should be displayed.
+            required: true
+            index: 1
   - flowanalysis:
       version: "0.1.0"
       author: Tim Hütz <tim@huetz.biz>
