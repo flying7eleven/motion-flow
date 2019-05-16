@@ -3,6 +3,7 @@ use clap::App;
 use log::{error, trace};
 use motion_flow::subcommands::dummy::Dummy;
 use motion_flow::subcommands::flowanalysis::FlowAnalysis;
+use motion_flow::subcommands::show::Show;
 use motion_flow::subcommands::{SubCommand, SubCommandError};
 use simplelog::{CombinedLogger, Config, LevelFilter, TermLogger, WriteLogger};
 use std::fs::File;
@@ -41,6 +42,13 @@ fn main() {
         let sub_command: Result<Box<dyn SubCommand>, SubCommandError> =
             match argument_matches.subcommand_name().unwrap() {
                 "dummy" => Dummy::get_instance(),
+                "show" => Show::get_instance(
+                    argument_matches
+                        .subcommand_matches("show")
+                        .unwrap()
+                        .value_of("image")
+                        .unwrap(),
+                ),
                 "flowanalysis" => FlowAnalysis::get_instance(
                     argument_matches
                         .subcommand_matches("flowanalysis")
