@@ -1,6 +1,8 @@
 [package]
 name = "motion-flow"
 version = "0.1.0"
+repository = "https://github.com/thuetz/motion-flow"
+license = "MIT"
 authors = ["Tim Hütz <tim@huetz.biz>"]
 edition = "2018"
 
@@ -10,3 +12,5 @@ simplelog = "0.5.3"
 clap = {version = "2.33.0", features = ["yaml"]}
 dirs = "1.0.5"
 regex = "1.1.6"
+image = "0.21.1"
+imageproc = "0.18.0"

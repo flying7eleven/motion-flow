@@ -7,6 +7,7 @@ pub enum SubCommandError {
     RegularExpressionInvalid,
     InputFolderDoesNotExist,
     InputFileDoesNotExist,
+    CouldNotReadFile,
 }
 
 pub trait SubCommand {
