@@ -40,4 +40,10 @@ mod tests {
             SubCommandError::InputFileDoesNotExist
         );
     }
+
+    #[test]
+    fn creating_an_instance_with_existing_image_works() {
+        let instance = Show::get_instance("./data/feret.jpg");
+        assert_eq!(instance.is_err(), false);
+    }
 }
